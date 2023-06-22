@@ -2,20 +2,19 @@
 <html>
 <head>
     <title>Pastelaria Juvevê</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style type="text/css">
         /* Estilos gerais */
         * {
             box-sizing: border-box;
         }
 
-        css
-Copy code
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-    }
-
-
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        /* Estilos para o menu */
         .menu {
             position: fixed;
             top: 0;
@@ -53,6 +52,17 @@ Copy code
             color: #333;
         }
 
+        .menu button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #bd3737;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Estilos para o conteúdo */
         .content {
             padding: 20px;
             margin-left: 250px;
@@ -63,246 +73,165 @@ Copy code
             margin-bottom: 20px;
         }
 
-        .cardapio-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 30px;
+        p {
+            font-size: 16px;
+            line-height: 1.5;
         }
 
-        .cardapio-table th,
-        .cardapio-table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .cardapio-table th {
-            background-color: #f2f2f2;
-        }
-
-        .search-bar {
-            margin-bottom: 20px;
+        .map-container {
             position: relative;
+            padding-bottom: 40%;
+            height: 0;
+            overflow: hidden;
+            margin-top: 40px;
         }
 
-        .overlay {
+        .map-container iframe {
             position: absolute;
-            top: 100%;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Estilos para o footer */
+        footer {
+            background-color: #f2f2f2;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
             left: 0;
             width: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none;
-            z-index: 1;
         }
 
-        .overlay-content {
-            padding: 20px;
-            margin-top: 10px;
-            background-color: #fff;
-            color: #333;
-        }
-
-        .overlay-content a {
-            display: block;
-            margin-bottom: 10px;
-            color: #333;
+        .footer-link {
+            color: #161616;
             text-decoration: none;
         }
 
-        .highlighted {
-            background-color: #ffd700;
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            margin: 0 10px;
+            font-size: 24px;
+            color: #131313;
+            vertical-align: middle;
+        }
+
+        /* Estilos para o texto na imagem */
+        .text {
+            fill: #ffffff;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            text-anchor: middle;
+        }
+
+        /* Estilos para dispositivos menores */
+        @media only screen and (max-width: 768px) {
+            .menu {
+                width: 100%;
+                height: auto;
+                padding-bottom: 20px;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 32px;
+            }
+
+            .menu-item {
+                font-size: 28px; 
+            }
+
+            .menu ul {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            .menu li {
+                margin: 0;
+            }
+
+            .menu a {
+                margin-right: 10px;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .map-container {
+                padding-bottom: 80%;
+            }
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/smoothness/jquery-ui.css" />
-    <script>
-       $(document).ready(function() {
-    var menuItems = [
-        'Pastel de Carne',
-        'Pastel de Queijo Muçarela',
-        'Pastel de Frango',
-        'Pastel de Catupiry',
-        'Pastel de Calabresa',
-        'Pastel de Palmito',
-        'Pastel de Cheddar',
-        'Pastel de Barreado',
-        'Pastel de Carne Seca',
-        'Pastel de Strogonoff',
-        'Pastel de Camarão',
-        'Pastel de Bacalhau',
-        'Pastel de Banana Açúcar e Canela',
-        'Pastel de Maçã Açúcar e Canela',
-        'Pastel de Chocolate Preto ou Branco',
-    ];
-
-    $("#searchInput").autocomplete({
-        source: menuItems,
-        select: function(event, ui) {
-            var selectedMenuItem = ui.item.label;
-            var selectedItem = $('#' + selectedMenuItem.replace(/ /g, '_').replace(/\(/g, '&#40;').replace(/\)/g, '&#41;'));
-            if (selectedItem.length) {
-                scrollToItem(selectedItem.attr('id'));
-            }
-        }
-    });
-});
-
-
-        function scrollToItem(itemId) {
-            var item = document.getElementById(itemId);
-            if (item) {
-                item.scrollIntoView({ behavior: 'smooth' });
-                item.classList.add('highlighted');
-                setTimeout(function() {
-                    item.classList.remove('highlighted');
-                }, 3000);
-            }
-        }
-    </script>
 </head>
 <body>
     <div class="menu">
         <ul>
             <li class="menu-item">Pastelaria Juvevê</li>
-            <li><a href="index.html">Início</a></li>
-            <li class="menu-item active"><a href="cardapio.html">Cardápio</a></li>
+            <li class="menu-item active"><a href="index2.html">Início</a></li>
+            <li><a href="cardapio.html">Cardápio</a></li>
             <li><a href="historia.html">Nossa História</a></li>
         </ul>
     </div>
-
-
-    <div class="curvas d-none d-sm-block" style="display: block; overflow: hidden; margin-top:30px;">
+    
+    <div class="curvas d-none d-sm-block" style="display: block; overflow: hidden; margin-top: 30px;">
         <svg width="200%" height="280px" version="1.1" id="curva" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 200" style="enable-background:new 0 0 1920 200;" xml:space="preserve">
             <style type="text/css">
                 .st0 { fill: #edb578; height: 0; }
                 .text { fill: #ffffff; font-family: Arial, sans-serif; font-size: 24px; text-anchor: middle; dominant-baseline: middle; }
             </style>
-            <title></title>
+            <title>curvas-brancas</title>
             <g id="Layer_1-2">
                 <path id="p1" class="st0" d="M851,22.4c-110.8,1.2-331.3,31.6-442,30C206,49.4,0,0,0,0v200h1920V6c0,0-174,76.4-415,88.4 C1340.7,102.6,1013.9,20.6,851,22.4z"/>
                 <text class="text" x="30%" y="50%" dominant-baseline="middle">
-                    <tspan x="30%" dy="0">Cardápio</tspan> 
+                    <tspan x="30%" dy="0">Bem-vindo à Pastelaria Juvevê</tspan> 
                     <tspan x="30%" dy="1.2em">
-                    </tspan>
-                    <tspan x="30%" dy="1.2em">
-                       
+                        <a href="cardapio.html" class="menu-button">Ver Cardápio</a>
                     </tspan>
                 </text>
             </g>
         </svg>
     </div>
-
+    
     <div class="content">
-        <h1>Cardápio</h1>
+        <h1>Horário de Funcionamento</h1>
+        <p>Segunda: 09:00 - 22:00</p>
+        <p>Terça a Sábado: 09:00 - 22:30</p>
+        <p>Domingo: Fechado</p>
+        
+        <h1>Sobre Nós</h1>
+        <p>A Pastelaria Juvevê é um local acolhedor e charmoso, onde você pode desfrutar de deliciosos pastéis salgados e doces feitos com ingredientes frescos e de qualidade. Nossos produtos são preparados com carinho e cuidado, garantindo sabor e qualidade incomparáveis.</p>
+        
+        <h1>Localização</h1>
+        <p>Estamos localizados na Av. João Gualberto, 1817 - Juvevê, Curitiba - PR, 80030-001</p>
+        
+        <div class="map-container">
+            <div class="map-container" style="margin-top: 0;">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3606.286120243274!2d-49.27415548538817!3d-25.40860658378828!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94dce42ee9d26ab5%3A0x6e8e4b8b7725a05d!2sAv.%20Jo%C3%A3o%20Gualberto%2C%201817%20-%20Juvev%C3%AA%2C%20Curitiba%20-%20PR%2C%2080030-001%2C%20Brasil!5e0!3m2!1spt-BR!2sus!4v1568906076280!5m2!1spt-BR!2sus" width="100%" height="200px" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+            </div>
+        </div>
+    </div>
 
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Pesquisar...">
+    <footer>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/pastelariajuveve"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/1pastelaria_juveve/"><i class="fab fa-instagram"></i></a>
         </div>
 
-        <table id="cardapioTable" class="cardapio-table">
-            <thead>
-                <tr>
-                    <th><h1>Pastéis Tradicionais</h1></th>
-                    <th>Preço</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr id="Pastel_de_Carne">
-                    <td>Carne</td>
-                    <td>R$ 8,50</td>
-                </tr>
-                <tr id="Pastel_de_Queijo">
-                    <td>Queijo Muçarela</td>
-                    <td>R$ 8,50</td>
-                </tr>
-                <tr id="Pastel_de_Frango">
-                    <td>Frango</td>
-                    <td>R$ 8,50</td>
-                </tr>
-                <tr id="Pastel_de_Catupiry">
-                    <td>Catupiry</td>
-                    <td>R$ 8,50</td>
-                </tr>
-                <tr id="Pastel_de_Calabresa">
-                    <td>Calabresa</td>
-                    <td>R$ 8,50</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <table id="cardapioTable" class="cardapio-table">
-            <thead>
-                <tr>
-                    <th><h1>Pastéis Simples com 1 recheio</h1></th>
-                    <th>Preço</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr id="Pastel_de_Palmito">
-                    <td>Palmito</td>
-                    <td>R$ 10,00</td>
-                </tr>
-                <tr id="Pastel_de_Cheddar">
-                    <td>Cheddar</td>
-                    <td>R$ 10,00</td>
-                </tr>
-                <tr id="Pastel_de_Barreado">
-                    <td>Barreado</td>
-                    <td>R$ 13,00</td>
-                </tr>
-                <tr id="Pastel_de_Carne_Seca">
-                    <td>Carne Seca</td>
-                    <td>R$ 27,00</td>
-                </tr>
-                <tr id="Pastel_de_Strogonoff">
-                    <td>Strogonoff</td>
-                    <td>R$ 22,00</td>
-                </tr>
-                <tr id="Pastel_de_Camarão">
-                    <td>Camarão</td>
-                    <td>R$ 28,00</td>
-                </tr>
-                <tr id="Pastel_de_Bacalhau">
-                    <td>Bacalhau</td>
-                    <td>R$ 28,00</td>
-                </tr>
-
-                <table id="cardapioTable" class="cardapio-table">
-                    <thead>
-                        <tr>
-                            <th><h1>Pastéis Doces</h1></th>
-                            <th>Preço</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr id="Pastel_de_Banana_Açúcar_e_Canela">
-                            <td>Banana (Açúcar e Canela)</td>
-                            <td>R$ 10,00</td>
-                        </tr>
-                        <tr id="Pastel_de_Maçã_Açúcar_e_Canela">
-                            <td>Maçã (Açúcar e Canela)</td>
-                            <td>R$ 10,00</td>
-                        </tr>
-                        
-                        <tr id="Pastel_de_Chocolate_Preto_ou_Branco">
-                            <td>Chocolate - Preto ou Branco</td>
-                            <td>R$ 13,00</td>
-                        </tr>
-                        <tr id="Pastel_de_Catupiry_Doce">
-                            <td>Catupiry</td>
-                            <td>R$ 8,50</td>
-                        </tr>
-                        <tr id="Pastel_de_Calabresa_Doce">
-                            <td>Calabresa</td>
-                            <td>R$ 8,50</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
+        <p>|</p>
         
-            </tbody>
-        </table>
-    </div>
+        <p>Telefone: <a href="tel:+554132530838">(41) 3253-0838</a></p>
+    </footer>
 </body>
 </html>
